@@ -10,4 +10,4 @@ And I can put all kinds of stuff on it!
 
 I like [google](https://www.google.com)
 
-I can directly link to my [about page](about.html)
+I can directly link to my [about page](about.html)  #no need for name of the website in your proj
