@@ -1,0 +1,78 @@
+---
+title: "Plot form NOAA"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(plotly)
+library(viridis)
+library(p8105.datasets)
+```
+
+```{r data select}
+set.seed(1)
+
+noaa_raw = p8105.datasets::ny_noaa
+
+noaa = 
+  noaa_raw %>% 
+  filter(!is.na(prcp) & !is.na(snow) & !is.na(snwd) & !is.na(tmax) & !is.na(tmin)) %>% 
+  separate(date, into = c("year", "month", "day"), spe = "-") %>% 
+  mutate(prcp = prcp / 10,
+         tmax = as.numeric(tmax) / 10,
+         tmin = as.numeric(tmin) / 10,
+         month = as.numeric(month),
+         day = as.numeric(day)) 
+  
+```
+
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### tmax vs tmin in 2010
+
+```{r}
+noaa %>%
+  filter(year == 2010) %>% 
+  sample_n(2000) %>% 
+  plot_ly(x = ~tmin, y = ~tmax, type = "scatter", mode = "markers", 
+          alpha = 0.5, 
+          color = ~month)
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Average precption in 2010 over months
+
+```{r}
+noaa %>% 
+  filter(year == 2010) %>% 
+  sample_n(2000) %>% 
+  group_by(month) %>% 
+  summarize(mean_prcp = mean(prcp)) %>% 
+  plot_ly(x = ~month, y = ~mean_prcp, color = ~month, type = "bar")
+```
+
+### Snow depth frome Jan. to Apr. in 2010
+
+```{r}
+noaa %>% 
+  filter(year == 2010 & month < 5) %>%
+  sample_n(2000) %>% 
+  group_by(month, day) %>% 
+  summarize(depth = mean(snwd)) %>% 
+  ungroup() %>% 
+  mutate(month = as.character(month)) %>% 
+  plot_ly (
+    type = "scatter3d" , 
+    x = ~day , y = ~month , z = ~depth ,
+    mode = "lines" )
+```
+

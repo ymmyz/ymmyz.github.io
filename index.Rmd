@@ -1,13 +1,9 @@
 ---
-title: "Holy cow!"
+title: "Homework4_ym2715"
 ---
 
-### I have a webpage!
+### This is my personal website
 
-And I can put all kinds of stuff on it!
+You can know me more in my [resume](resume.html)
 
-## Add some links
-
-I like [google](https://www.google.com)
-
-I can directly link to my [about page](about.html)  #no need for name of the website in your proj
+This is where I put the [plots](dashboard.html)
